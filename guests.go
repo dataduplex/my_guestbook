@@ -25,6 +25,7 @@ func (g *Guests) Clone() *Guests {
 	return &Guests{guests: guests}
 }
 
+// potential performance bottleneck
 func (g *Guests) Add(name string, special bool) {
 	g.mu.Lock()
 	defer g.mu.Unlock()
@@ -32,6 +33,8 @@ func (g *Guests) Add(name string, special bool) {
 	g.guests[name] = special
 }
 
+// potential performance bottleneck especially if we have large number of guests
+// write operation on guests map will be blocking until this method finishes
 func (g *Guests) Guests(cb func(name string) bool) {
 	g.mu.RLock()
 	defer g.mu.RUnlock()
