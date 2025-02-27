@@ -33,6 +33,8 @@ func (s *Server) Run(ctx context.Context) {
 	for {
 		select {
 		case <-ctx.Done():
+			// make sure to save to call SaveGuests before returning here, or in a defer statement
+			// otherwise, we might end up losing data
 			return
 
 		case <-ticker.C:
